@@ -24,6 +24,35 @@ function createFileWithTemplate(tree: Tree, fileName: string, template: string) 
   }
 }
 
+function processStyles(tree: Tree, _context: SchematicContext) {
+  const filePath = 'src/styles.scss';
+
+  if(!tree.exists(filePath)){
+    return;
+  }
+
+  const fileBuffer = tree.read(filePath);
+  const content = fileBuffer ? fileBuffer.toString() : '';
+
+  if (content.includes('@use "tailwindcss";')) {
+    return;
+  }
+
+  // Create string variable with the new content
+  const newContent = `@use "tailwindcss";
+@use "primeicons/primeicons.css";
+
+body, html {
+    height: 100%;
+    margin: 0;
+    min-height: 100%;
+}
+`;
+
+  const updatedContent = newContent + content;
+  tree.overwrite(filePath, updatedContent);
+}
+
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
 export function init(_options: any): Rule {
@@ -36,6 +65,12 @@ export function init(_options: any): Rule {
 
     // Create .postcssrc.json file from template
     createFileWithTemplate(tree, '.postcssrc.json', '.postcssrc.json.template');
+
+    // Config SCSS
+    processStyles(tree, _context);
+
+    // Create .postcssrc.json file from template
+    createFileWithTemplate(tree, 'tailwind.config.js', 'tailwind.config.js.template');
 
     return tree;
   };
