@@ -1,0 +1,74 @@
+import { Component, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { MCFooterService, MCSidebarService, MCTopbarService } from '@mckit/layout-core';
+import { MCIconToggleSidebarButton } from '@mckit/layout';
+import { MCImage, MCMenu, MCSubtitle } from '@mckit/core';
+import { FooterComponent } from './layout/footer/footer.component';
+import { MCAvatarWithMenu } from '@mckit/auth';
+import { MenuItem } from 'primeng/api';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
+})
+export class AppComponent {
+  sidebarService = inject(MCSidebarService);
+  topbarService = inject(MCTopbarService);
+  footerService = inject(MCFooterService);
+
+  items: Array<MenuItem> = [
+    {
+      label: 'Hi Matias',
+      items: [
+        {
+          label: 'Integrations ',
+          icon: 'pi pi-link',
+          routerLink: '/integrations'
+        },
+        {
+          label: 'Logout ',
+          icon: 'pi pi-window-maximize',
+          command: () => this.onLogout()
+        }
+      ]
+    }
+  ];
+
+  ngOnInit(): void {
+    this.loadSidebar();
+    this.loadTopbar();
+    this.loadFooter();
+  }
+
+  onLogout() {
+    /*this.authService.removeUser()
+    .subscribe(res => window.location.reload());*/
+  }
+
+  loadTopbar() {
+    this.topbarService.addComponentToLeft(new MCIconToggleSidebarButton());
+
+    this.topbarService.addComponentToRight(new DarkModeButton());
+    this.topbarService.addComponentToRight(new MCAvatarWithMenu(this.items));
+  }
+
+  loadSidebar() {
+    /**
+     * Add components in sidebar all at once
+     */
+    this.sidebarService.setComponents([
+      new MCImage('https://tots.agency/assets/img/logos/logo-horiz-black-color.svg', 150),
+      new MCSubtitle('MENU'),
+      new MCMenu([
+        { label: 'Accounts', link: '/accounts', icon: 'pi pi-building-columns' },
+        { label: 'Records', link: '/records', icon: 'pi pi-building-columns' },
+      ])
+    ]);
+  }
+
+  loadFooter() {
+    this.footerService.addComponent({ component: FooterComponent, config: { } });
+  }
+}

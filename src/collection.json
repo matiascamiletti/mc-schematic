@@ -12,6 +12,10 @@
     "add-login-page": {
       "description": "Config and create login page",
       "factory": "./add-login-page/index#addLoginPage"
+    },
+    "install-layout-fuse": {
+      "description": "Install layout fuse",
+      "factory": "./install-layout-fuse/index#install"
     }
   }
 }

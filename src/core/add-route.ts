@@ -1,6 +1,6 @@
 import { SchematicContext, Tree } from '@angular-devkit/schematics';
 
-export function addRoute(routeText: string, tree: Tree, context: SchematicContext) {
+export function addRoute(routeText: string, tree: Tree, context: SchematicContext, importsText: string|undefined = undefined) {
     const filePath = 'src/app/app.routes.ts';
 
     if (!tree.exists(filePath)) {
@@ -10,11 +10,13 @@ export function addRoute(routeText: string, tree: Tree, context: SchematicContex
 
     const content = tree.read(filePath)?.toString('utf-8') || '';
 
-    const updatedContent = content.replace(/\[\s*([\s\S]*?)\s*\]/, (_, routes) => {
+    let updatedContent = content.replace(/\[\s*([\s\S]*?)\s*\]/, (_, routes) => {
         return `[${routes.trim() ? routes.trim() + ', ' : ''}${routeText}]`;
     });
 
-    tree.overwrite(filePath, updatedContent);
+    if(importsText != undefined){
+        updatedContent = importsText + '\n' + updatedContent;
+    }
 
-    context.logger.info(`✅ Ruta añadida correctamente`);
+    tree.overwrite(filePath, updatedContent);
 }
