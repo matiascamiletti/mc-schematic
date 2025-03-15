@@ -4,6 +4,10 @@
     "mc-schematic": {
       "description": "A blank schematic.",
       "factory": "./mc-schematic/index#mcSchematic"
+    },
+    "init": {
+      "description": "Config a new project.",
+      "factory": "./init/index#init"
     }
   }
 }
