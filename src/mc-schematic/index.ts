@@ -6,7 +6,7 @@ import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 export function mcSchematic(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
     // Aquí puedes definir la lógica para generar archivos o modificar el proyecto
-    tree.create('hello.txt', 'Hello, World!');
+    //tree.create('hello.txt', 'Hello, World!');
     return tree;
   };
 }

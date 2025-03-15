@@ -1,5 +1,7 @@
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { exec } from 'child_process';
+import * as fs from 'fs';
+import * as path from 'path';
 
 function runCommand(command: string, _context: SchematicContext) {
   exec(command, (error, stdout, stderr) => {
@@ -14,6 +16,14 @@ function runCommand(command: string, _context: SchematicContext) {
   });
 }
 
+function createFileWithTemplate(tree: Tree, fileName: string, template: string) {
+  const filePath = path.join(__dirname, 'files/' + template);
+  if (fs.existsSync(filePath)) {
+    let content = fs.readFileSync(filePath, 'utf8');
+    tree.create(fileName, content);
+  }
+}
+
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
 export function init(_options: any): Rule {
@@ -23,6 +33,9 @@ export function init(_options: any): Rule {
     runCommand('npm install --save @mckit/core primeng @primeng/themes primeicons @ngx-pwa/local-storage@19', _context);
     runCommand('npm install tailwindcss @tailwindcss/postcss postcss --force', _context);
     runCommand('npm i tailwindcss-primeui --save', _context);
+
+    // Create .postcssrc.json file from template
+    createFileWithTemplate(tree, '.postcssrc.json', '.postcssrc.json.template');
 
     return tree;
   };
