@@ -1,0 +1,90 @@
+import { Component, DestroyRef, inject, viewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MCAuthSakaiComponent, MCAuthSakaiConfig, MCAuthenticationService, MCAuthModel, MCUser } from '@mckit/auth';
+import { catchError, switchMap, take, takeUntil, tap } from 'rxjs';
+
+@Component({
+    selector: 'app-login-page',
+    imports: [MCAuthSakaiComponent],
+    templateUrl: './login-page.component.html',
+    styleUrl: './login-page.component.scss'
+})
+export class LoginPageComponent {
+
+  authComp = viewChild.required(MCAuthSakaiComponent);
+
+  mcAuthService = inject(MCAuthenticationService);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+
+  onDestroy = inject(DestroyRef);
+
+  config!: MCAuthSakaiConfig;
+
+  routeToMain = '/dashboard';
+
+  ngOnInit(): void {
+    this.configLoader();
+    this.loadConfig();
+  }
+
+  onAction(type: string) {
+    if(type === 'forgot-password') {
+      //this.dialogService.open(ForgotPasswordDialogComponent, { header: 'Recover Pass' });
+    }
+  }
+
+  onLogin(data: MCAuthModel) {
+    /*this.authService.signIn(data.email!, data.password!)
+    .pipe(
+      catchError(err => {
+        this.authComp().hideLoading();
+        this.authComp().showErrorMessage(err.error?.message || 'Error desconocido');
+        throw err;
+      }),
+    )
+    .subscribe(user => this.router.navigateByUrl(this.routeToMain));*/
+  }
+
+  loadConfig() {
+    this.config = new MCAuthSakaiConfig();
+    this.config.title = 'Life Purse - Inicio de sesión';
+    this.config.subtitle = 'Por favor, inicie sesión para continuar';
+    this.config.emailPlaceholder = 'Correo electrónico';
+    this.config.passwordPlaceholder = 'Contraseña';
+    this.config.submitButton = 'Iniciar sesión';
+  }
+
+  configLoader() {
+    this.route.queryParams
+    .pipe(
+      take(1),
+      tap(params => this.processRedirectUrl(params['redirect'])),
+      switchMap(() => this.mcAuthService.getUser()),
+      tap(user => this.processIfLogged(user))
+    )
+    .subscribe();
+  }
+
+  processIfLogged(user?: MCUser) {
+    if(user != undefined){
+      this.router.navigateByUrl(this.routeToMain);
+    }
+  }
+
+  processRedirectUrl(redirect?: string) {
+    if(redirect == undefined) {
+      // this.loaderService.hide();
+    } else if (
+      redirect !== '/login' &&
+      redirect !== '/' &&
+      redirect !== '' &&
+      redirect !== null &&
+      redirect !== undefined &&
+      redirect !== '%2F' &&
+      redirect !== '/login;redirect=%2F'
+    ) {
+      this.routeToMain = redirect;
+    }
+  }
+}

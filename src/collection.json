@@ -8,6 +8,10 @@
     "init": {
       "description": "Config a new project.",
       "factory": "./init/index#init"
+    },
+    "add-login-page": {
+      "description": "Config and create login page",
+      "factory": "./add-login-page/index#addLoginPage"
     }
   }
 }
