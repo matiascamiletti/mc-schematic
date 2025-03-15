@@ -61,6 +61,10 @@ function processStyles(tree: Tree, _context: SchematicContext) {
   const newContent = `@use "tailwindcss";
 @use "primeicons/primeicons.css";
 
+@source "../node_modules/@mckit/core";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 body, html {
     height: 100%;
     margin: 0;
