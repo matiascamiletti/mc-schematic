@@ -3,40 +3,44 @@ import * as ts from 'typescript';
 
 export interface ClassData {
     name: string;
+    path: string;
     properties: string[];
 }
 
-export function getPropertiesByClass(tree: Tree, filePath: string): ClassData {
+export function getPropertiesByClass(tree: Tree, className: string): ClassData {
 
-    const file = tree.read(filePath);
-    if (!file) {
-      throw new Error(`El archivo ${filePath} no existe.`);
-    }
+    let classFilePath: string|undefined;
+    let properties: string[] = [];
 
-    const fileContent = file.toString('utf-8');
+    tree.visit((filePath) => {
+        if (!filePath.endsWith('.ts')) return;
 
-    const sourceFile = ts.createSourceFile(filePath, fileContent, ts.ScriptTarget.Latest, true);
+        const file = tree.read(filePath);
+        if (!file) return;
 
-    let firstClass: ClassData | null = null;
+        const fileContent = file.toString('utf-8');
+        const sourceFile = ts.createSourceFile(filePath, fileContent, ts.ScriptTarget.Latest, true);
 
-    ts.forEachChild(sourceFile, (node) => {
-        if (!firstClass && ts.isClassDeclaration(node) && node.name) {
-            const className = node.name.text;
-            const properties: string[] = [];
+        ts.forEachChild(sourceFile, (node) => {
+            if (ts.isClassDeclaration(node) && node.name?.text === className) {
+                classFilePath = filePath;
 
-            node.members.forEach((member) => {
-                if (ts.isPropertyDeclaration(member) && member.name) {
-                    properties.push(member.name.getText());
-                }
-            });
-
-            firstClass = { name: className, properties };
-        }
+                node.members.forEach((member) => {
+                    if (ts.isPropertyDeclaration(member) && member.name) {
+                        properties.push(member.name.getText());
+                    }
+                });
+            }
+        });
     });
 
-    if(firstClass == undefined||firstClass == null){
-        throw new Error(`No se encontró ninguna clase en el archivo ${filePath}`);
+    if(classFilePath == undefined){
+        throw new Error(`No se encontró la clase ${className} en ningún archivo.`);
     }
 
-    return firstClass;
+    return {
+        name: className,
+        path: classFilePath,
+        properties
+    };
 }
