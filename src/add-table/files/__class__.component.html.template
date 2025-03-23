@@ -7,6 +7,8 @@
     [columns]="columns"
     [searchFieldsKey]="searchFieldsKey" >
 
+    <ng-template mcThTemplate="actions"></ng-template>
+
     <ng-template mcTdTemplate="actions" let-row>
         <mc-actions-column [item]="row" (onEdit)="onClickEdit($event)" (onRemove)="onClickRemove($event)"></mc-actions-column>
     </ng-template>
