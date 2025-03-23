@@ -11,7 +11,7 @@ import { MCActionsColumn, MCTdTemplateDirective, MCThTemplateDirective } from '@
   templateUrl: './{{className}}.component.html',
   styleUrl: './{{className}}.component.scss'
 })
-export class {{classNameCamel}} implements OnInit {
+export class {{classNameCamel}} {
 
     odataPage = viewChild(MCOdataPage);
 
