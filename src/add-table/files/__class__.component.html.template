@@ -1,0 +1,14 @@
+<mc-odata-page
+    [breadcrumb]="breadcrumb"
+    [title]="'Title page'"
+    [subtitle]="'Description of page'"
+    [key]="'{{className}}'"
+    [httpService]="httpService"
+    [columns]="columns"
+    [searchFieldsKey]="searchFieldsKey" >
+
+    <ng-template mcTdTemplate="actions" let-row>
+        <mc-actions-column [item]="row" (onEdit)="onClickEdit($event)" (onRemove)="onClickRemove($event)"></mc-actions-column>
+    </ng-template>
+
+</mc-odata-page>

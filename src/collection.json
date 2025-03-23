@@ -16,6 +16,11 @@
     "install-layout-fuse": {
       "description": "Install layout fuse",
       "factory": "./install-layout-fuse/index#install"
+    },
+    "addTable": {
+      "description": "Add Table",
+      "factory": "./add-table/index#addTable",
+      "schema": "./add-table/schema.json"
     }
   }
 }

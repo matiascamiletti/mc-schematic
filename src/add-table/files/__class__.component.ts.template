@@ -1,0 +1,38 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, viewChild } from '@angular/core';
+import { MCOdataPage } from '@mckit/odata';
+import { MenuItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { MCActionsColumn, MCTdTemplateDirective, MCThTemplateDirective } from '@mckit/table';
+
+@Component({
+  selector: 'app-{{className}}',
+  imports: [CommonModule, MCOdataPage, ButtonModule, MCThTemplateDirective, MCTdTemplateDirective, MCActionsColumn],
+  templateUrl: './{{className}}.component.html',
+  styleUrl: './{{className}}.component.scss'
+})
+export class {{classNameCamel}} implements OnInit {
+
+    odataPage = viewChild(MCOdataPage);
+
+    breadcrumb: MenuItem[] = [
+        { label: 'Home', routerLink: '/' },
+        { label: '{{classNameCamel}}' }
+    ];
+
+    httpService = inject(TestService);
+
+    columns = [
+        {{columns}}
+    ];
+
+    searchFieldsKey = ['title'];
+
+    onClickEdit(item: any) {
+        // this.router.navigate(['edit', item.id], { relativeTo: this.route });
+    }
+
+    onClickRemove(item: any) {
+        this.odataPage()?.onClickRemove(item);
+    }
+}
