@@ -60,6 +60,7 @@ function processStyles(tree: Tree, _context: SchematicContext) {
   // Create string variable with the new content
   const newContent = `@use "tailwindcss";
 @use "primeicons/primeicons.css";
+@plugin "tailwindcss-primeui";
 
 @source "../node_modules/@mckit/core";
 
@@ -95,7 +96,7 @@ function processAppConfig(tree: Tree, _context: SchematicContext) {
 
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeng/themes/aura';`, importEndPosition + 1);
+import Aura from '@primeuix/themes/aura';`, importEndPosition + 1);
 
   // Search position of the last ]
   const providerPosition = content.lastIndexOf(']');
