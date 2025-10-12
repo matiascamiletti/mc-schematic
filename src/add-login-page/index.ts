@@ -84,7 +84,7 @@ export function addLoginPage(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
 
     // Install the required dependencies
-    runCommand('npm install --save @ngx-pwa/local-storage@19 @mckit/auth', _context);
+    runCommand('npm install --save @ngx-pwa/local-storage@20 @mckit/auth', _context);
 
     // Generate environments
     runCommand('ng g environments', _context);

@@ -1,6 +1,6 @@
 {
   "name": "@mckit/schematics",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "A blank schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -13,8 +13,8 @@
   "license": "MIT",
   "schematics": "./src/collection.json",
   "dependencies": {
-    "@angular-devkit/core": "^18.2.6",
-    "@angular-devkit/schematics": "^18.2.6",
+    "@angular-devkit/core": "^20.0.0",
+    "@angular-devkit/schematics": "^20.0.0",
     "typescript": "~5.5.2"
   },
   "devDependencies": {
