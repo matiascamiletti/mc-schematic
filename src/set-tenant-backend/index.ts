@@ -66,6 +66,7 @@ export function install(_options: any): Rule {
 `);
 
     // Replace App Component
+    tree.overwrite('src/app/app.html', '<router-outlet />');
     tree.overwrite('src/app/app.ts', getContentByFile(__dirname, 'app.ts.template') ?? '');
 
     // Create Footer Layout
