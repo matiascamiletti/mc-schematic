@@ -10,7 +10,7 @@ export function install(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
     // Install the required dependencies
     runCommand('npm install --save @mckit/layout-core @mckit/layout @mckit/layout-fuse', _context);
-  
+
     // Config SCSS
     addSourceInStyles(tree, `
 @source "../node_modules/@mckit/layout-core";
@@ -30,8 +30,8 @@ export function install(_options: any): Rule {
     runCommand('ng g c layout/footer', _context);
 
     // Replace App Component
-    const component = getContentByFile(__dirname, 'app.component.ts.template');
-    tree.overwrite('src/app/app.component.ts', component ?? '');
+    const component = getContentByFile(__dirname, 'app.ts.template');
+    tree.overwrite('src/app/app.ts', component ?? '');
 
     return tree;
   };

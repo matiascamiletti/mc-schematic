@@ -17,10 +17,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'app-root',
   imports: [RouterOutlet],
   providers: [DialogService, MCHttpFormModalService, TenantCreateForm],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  templateUrl: './app.html',
+  styleUrl: './app.scss'
 })
-export class AppComponent {
+export class App {
   sidebarService = inject(MCSidebarService);
   topbarService = inject(MCTopbarService);
   footerService = inject(MCFooterService);
