@@ -50,6 +50,9 @@ export function install(_options: any): Rule {
     // Install the required dependencies
     runCommand('npm install --save @mckit/auth @mckit/filter @mckit/form @mckit/odata @mckit/table @mckit/tenant', _context);
 
+    // Generate environments
+    runCommand('ng g environments', _context);
+
     // Config SCSS
     addSourceInStyles(tree, `
 @source "../node_modules/@mckit/auth";
