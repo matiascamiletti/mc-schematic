@@ -37,8 +37,14 @@ export function install(_options: any): Rule {
     tree.overwrite('src/app/features/tenant/pages/no-tenant-page/no-tenant-page.component.ts', getContentByFile(__dirname, 'no-tenant-page.component.ts.template') ?? '');
 
     // Create Login page
+    tree.overwrite('src/app/features/auth/pages/sign-in-page/sign-in-page.component.scss', '');
     tree.overwrite('src/app/features/auth/pages/sign-in-page/sign-in-page.component.html', getContentByFile(__dirname, 'sign-in-page.component.html.template') ?? '');
     tree.overwrite('src/app/features/auth/pages/sign-in-page/sign-in-page.component.ts', getContentByFile(__dirname, 'sign-in-page.component.ts.template') ?? '');
+
+    // Create Register page
+    tree.overwrite('src/app/features/auth/pages/sign-up-page/sign-up-page.component.scss', '');
+    tree.overwrite('src/app/features/auth/pages/sign-up-page/sign-up-page.component.html', getContentByFile(__dirname, 'register-page.component.html.template') ?? '');
+    tree.overwrite('src/app/features/auth/pages/sign-up-page/sign-up-page.component.ts', getContentByFile(__dirname, 'register-page.component.ts.template') ?? '');
 
     // Add Route
     addRoute(`{

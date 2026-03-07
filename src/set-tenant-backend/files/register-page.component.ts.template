@@ -1,0 +1,87 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { MessageModule } from 'primeng/message';
+import { Router, RouterModule } from '@angular/router';
+import { MCMessage } from '@mckit/core';
+import { catchError, switchMap, take, tap } from 'rxjs';
+import { MCAuthenticationService } from '@mckit/auth';
+import { MCTenantService } from '@mckit/tenant';
+
+
+@Component({
+  selector: 'app-register-page',
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, CardModule, IconFieldModule, InputIconModule, InputTextModule, PasswordModule, MessageModule, RouterModule],
+  templateUrl: './register-page.component.html',
+  styleUrl: './register-page.component.scss'
+})
+export class RegisterPage {
+  group = new FormGroup({
+    firstname: new FormControl<string>(''),
+    project_name: new FormControl<string>('', Validators.required),
+    email: new FormControl<string>('', [Validators.required, Validators.email]),
+    password: new FormControl<string>('', Validators.required),
+    grant_type: new FormControl<string>('password'),
+  });
+
+  isSending = signal(false);
+
+  messages = signal<Array<MCMessage>>([]);
+
+  authService = inject(MCAuthenticationService);
+  tenantService = inject(MCTenantService);
+
+  router = inject(Router);
+
+  onClickSubmit() {
+    if (this.group.invalid) {
+      return;
+    }
+
+    if (this.isSending()) {
+      return;
+    }
+
+    this.clearMessages();
+    this.showLoading();
+
+    this.authService.register(this.group.getRawValue())
+      .pipe(
+        switchMap(() => this.tenantService.create({ name: this.group.controls.project_name.value ?? 'Empty' })),
+        switchMap(() => this.tenantService.list().pipe(take(1))),
+        tap(tenants => this.tenantService.setCurrent(tenants.data[0])),
+        catchError(err => {
+          this.hideLoading();
+          this.showErrorMessage(err.error?.message || 'Error desconocido');
+          throw err;
+        }),
+      )
+      .subscribe(user => this.router.navigateByUrl('/dashboard'));
+  }
+
+  showSuccessMessage(message: string) {
+    this.messages.set([{ severity: 'success', text: message }]);
+  }
+
+  showErrorMessage(message: string) {
+    this.messages.set([{ severity: 'error', text: message }]);
+  }
+
+  clearMessages() {
+    this.messages.set([]);
+  }
+
+  showLoading() {
+    this.isSending.set(true);
+  }
+
+  hideLoading() {
+    this.isSending.set(false);
+  }
+}
