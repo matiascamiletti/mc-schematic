@@ -1,6 +1,6 @@
 {
   "name": "@mckit/schematics",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "A blank schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json",

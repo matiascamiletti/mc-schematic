@@ -63,26 +63,26 @@ export function install(_options: any): Rule {
     tree.overwrite('src/app/app.ts', getContentByFile(__dirname, 'app.ts.template') ?? '');
 
     // Create Footer Layout
-    tree.overwrite('src/app/shared/components/footer-layout/footer-layout.component.scss', '');
-    tree.overwrite('src/app/shared/components/footer-layout/footer-layout.component.html', getContentByFile(__dirname, 'footer-layout.component.html.template') ?? '');
-    tree.overwrite('src/app/shared/components/footer-layout/footer-layout.component.ts', getContentByFile(__dirname, 'footer-layout.component.ts.template') ?? '');
+    tree.create('src/app/shared/components/footer-layout/footer-layout.component.scss', '');
+    tree.create('src/app/shared/components/footer-layout/footer-layout.component.html', getContentByFile(__dirname, 'footer-layout.component.html.template') ?? '');
+    tree.create('src/app/shared/components/footer-layout/footer-layout.component.ts', getContentByFile(__dirname, 'footer-layout.component.ts.template') ?? '');
 
     // Create Tenant form modal
-    tree.overwrite('src/app/features/tenant/modals/tenant-create-form.service.ts', getContentByFile(__dirname, 'tenant-create-form.service.ts.template') ?? '');
+    tree.create('src/app/features/tenant/modals/tenant-create-form.service.ts', getContentByFile(__dirname, 'tenant-create-form.service.ts.template') ?? '');
 
     // Create No tenant page
-    tree.overwrite('src/app/features/tenant/pages/no-tenant-page/no-tenant-page.component.html', getContentByFile(__dirname, 'no-tenant-page.component.html.template') ?? '');
-    tree.overwrite('src/app/features/tenant/pages/no-tenant-page/no-tenant-page.component.ts', getContentByFile(__dirname, 'no-tenant-page.component.ts.template') ?? '');
+    tree.create('src/app/features/tenant/pages/no-tenant-page/no-tenant-page.component.html', getContentByFile(__dirname, 'no-tenant-page.component.html.template') ?? '');
+    tree.create('src/app/features/tenant/pages/no-tenant-page/no-tenant-page.component.ts', getContentByFile(__dirname, 'no-tenant-page.component.ts.template') ?? '');
 
     // Create Login page
-    tree.overwrite('src/app/features/auth/pages/sign-in-page/sign-in-page.component.scss', '');
-    tree.overwrite('src/app/features/auth/pages/sign-in-page/sign-in-page.component.html', getContentByFile(__dirname, 'sign-in-page.component.html.template') ?? '');
-    tree.overwrite('src/app/features/auth/pages/sign-in-page/sign-in-page.component.ts', getContentByFile(__dirname, 'sign-in-page.component.ts.template') ?? '');
+    tree.create('src/app/features/auth/pages/sign-in-page/sign-in-page.component.scss', '');
+    tree.create('src/app/features/auth/pages/sign-in-page/sign-in-page.component.html', getContentByFile(__dirname, 'sign-in-page.component.html.template') ?? '');
+    tree.create('src/app/features/auth/pages/sign-in-page/sign-in-page.component.ts', getContentByFile(__dirname, 'sign-in-page.component.ts.template') ?? '');
 
     // Create Register page
-    tree.overwrite('src/app/features/auth/pages/sign-up-page/sign-up-page.component.scss', '');
-    tree.overwrite('src/app/features/auth/pages/sign-up-page/sign-up-page.component.html', getContentByFile(__dirname, 'register-page.component.html.template') ?? '');
-    tree.overwrite('src/app/features/auth/pages/sign-up-page/sign-up-page.component.ts', getContentByFile(__dirname, 'register-page.component.ts.template') ?? '');
+    tree.create('src/app/features/auth/pages/sign-up-page/sign-up-page.component.scss', '');
+    tree.create('src/app/features/auth/pages/sign-up-page/sign-up-page.component.html', getContentByFile(__dirname, 'register-page.component.html.template') ?? '');
+    tree.create('src/app/features/auth/pages/sign-up-page/sign-up-page.component.ts', getContentByFile(__dirname, 'register-page.component.ts.template') ?? '');
 
     // Add Route
     addRoute(`{
