@@ -16,12 +16,12 @@ import { MCTenantService } from '@mckit/tenant';
 
 
 @Component({
-  selector: 'app-register-page',
+  selector: 'app-sign-up-page',
   imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, CardModule, IconFieldModule, InputIconModule, InputTextModule, PasswordModule, MessageModule, RouterModule],
-  templateUrl: './register-page.component.html',
-  styleUrl: './register-page.component.scss'
+  templateUrl: './sign-up-page.component.html',
+  styleUrl: './sign-up-page.component.scss'
 })
-export class RegisterPage {
+export class SignUpPage {
   group = new FormGroup({
     firstname: new FormControl<string>(''),
     project_name: new FormControl<string>('', Validators.required),

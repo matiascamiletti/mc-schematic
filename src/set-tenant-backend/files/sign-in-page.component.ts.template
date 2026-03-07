@@ -5,12 +5,12 @@ import { MCTenantService } from '@mckit/tenant';
 import { catchError, switchMap, take, takeUntil, tap } from 'rxjs';
 
 @Component({
-  selector: 'app-login-page',
+  selector: 'app-sign-in-page',
   imports: [MCAuthBasicComponent],
-  templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.scss'
+  templateUrl: './sign-in-page.component.html',
+  styleUrl: './sign-in-page.component.scss'
 })
-export class LoginPage {
+export class SignInPage {
   authComp = viewChild.required(MCAuthBasicComponent);
 
   mcAuthService = inject(MCAuthenticationService);
