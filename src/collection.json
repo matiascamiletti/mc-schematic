@@ -21,6 +21,10 @@
       "description": "Add Table",
       "factory": "./add-table/index#addTable",
       "schema": "./add-table/schema.json"
+    },
+    "set-tenant-backend": {
+      "description": "Set multi tenant backend",
+      "factory": "./set-tenant-backend/index#install"
     }
   }
 }

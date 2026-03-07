@@ -1,0 +1,133 @@
+import { Component, DestroyRef, inject } from '@angular/core';
+import { RouterOutlet, Router } from '@angular/router';
+import { MCAuthenticationService, MCAvatarWithMenu } from '@mckit/auth';
+import { MCImage, MCMenu, MCSubtitle } from '@mckit/core';
+import { MCTenant, MCTenantMenu, MCTenantService } from '@mckit/tenant';
+import { MenuItem } from 'primeng/api';
+import { MCFooterService, MCSidebarService, MCTopbarService } from '@mckit/layout-core';
+import { MCIconToggleSidebarButton } from '@mckit/layout';
+import { FooterLayoutComponent } from './shared/components/footer-layout/footer-layout.component';
+import { switchMap, takeWhile, tap } from 'rxjs';
+import { TenantCreateForm } from './features/tenant/modals/tenant-create-form.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { mcEventFormOperator, MCEventModalForm, MCHttpFormModalService } from '@mckit/form';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet],
+  providers: [DialogService, MCHttpFormModalService, TenantCreateForm],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
+})
+export class AppComponent {
+  sidebarService = inject(MCSidebarService);
+  topbarService = inject(MCTopbarService);
+  footerService = inject(MCFooterService);
+  mcAuthService = inject(MCAuthenticationService);
+
+  tenantCreateForm = inject(TenantCreateForm);
+
+  destroyRef = inject(DestroyRef);
+
+  tenantService = inject(MCTenantService);
+
+  router = inject(Router);
+
+  items: Array<MenuItem> = [
+    {
+      label: 'Hi!',
+      items: [
+        {
+          label: 'Logout ',
+          icon: 'pi pi-window-maximize',
+          command: () => this.onLogout()
+        }
+      ]
+    }
+  ];
+
+  ngOnInit(): void {
+    this.loadSidebar();
+    this.loadTopbar();
+    this.loadFooter();
+    this.loadTenantMenu();
+  }
+
+  onLogout() {
+    this.mcAuthService.removeUser()
+      .pipe(
+        tap(() => window.location.reload())
+      )
+      .subscribe();
+  }
+
+  loadTopbar() {
+    this.topbarService.addComponentToLeft(new MCIconToggleSidebarButton());
+
+    //this.topbarService.addComponentToRight(new DarkModeButton());
+    this.topbarService.addComponentToRight(new MCAvatarWithMenu(this.items));
+  }
+
+  loadSidebar() {
+    /**
+     * Add components in sidebar all at once
+     */
+    this.sidebarService.setComponents([
+      new MCImage('https://tots.agency/assets/img/logos/logo-horiz-black-color.svg', 150),
+      new MCTenantMenu(true),
+      //new MCSubtitle('MENU'),
+      new MCMenu([
+        { label: 'Dashboard', link: '/dashboard', icon: 'pi pi-objects-column' },
+        { label: 'Team', link: '/team', icon: 'pi pi-users' },
+        { label: 'Settings', link: '/settings', icon: 'pi pi-cog' }
+      ])
+    ]);
+  }
+
+  loadFooter() {
+    this.footerService.addComponent({ component: FooterLayoutComponent, config: {} });
+  }
+
+  onClickAddTenant() {
+    this.tenantCreateForm.open()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        mcEventFormOperator('saved', (result: MCEventModalForm) => this.afterNew(result))
+      )
+      .subscribe();
+  }
+
+  afterNew(result: MCEventModalForm) {
+    this.tenantService.setCurrent(result.content);
+    window.location.reload();
+  }
+
+  onClickTenant(tenant: MCTenant) {
+    this.tenantService.setCurrent(tenant)
+    window.location.reload();
+  }
+
+  loadTenantMenu() {
+    this.tenantService.onEvent.pipe(
+      takeUntilDestroyed(this.destroyRef),
+      takeWhile((event: {
+        type: string;
+        tenant: MCTenant | undefined;
+      }) => event.type == 'click' || event.type == 'click-new'),
+      tap((event: {
+        type: string;
+        tenant: MCTenant | undefined;
+      }) => {
+
+        if (event.type == 'click') {
+          this.onClickTenant(event.tenant!);
+        } else if (event.type == 'click-new') {
+          this.onClickAddTenant();
+        }
+
+
+      })
+    ).subscribe();
+  }
+}

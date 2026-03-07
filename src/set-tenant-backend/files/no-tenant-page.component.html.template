@@ -1,0 +1,35 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+    <p-card styleClass="max-w-md w-full shadow-lg">
+        <ng-template pTemplate="header">
+            <div class="h-2 bg-primary-500 rounded-t-lg"></div>
+        </ng-template>
+
+        <div class="text-center pt-8 pb-4">
+            <div
+                class="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400">
+                <i class="pi pi-building text-3xl"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">No Tenant Found</h1>
+            <p class="text-gray-600 dark:text-gray-300 mb-6 px-4">
+                You are not associated with any organization yet. You can create a new one or ask an administrator to
+                invite you.
+            </p>
+        </div>
+
+        <ng-template pTemplate="footer">
+            <div class="flex flex-col gap-3">
+                <p-button label="Create New Tenant" icon="pi pi-plus" styleClass="w-full"
+                    (onClick)="onClickAdd()"></p-button>
+
+                <p-button label="Logout" icon="pi pi-sign-out" styleClass="w-full p-button-secondary p-button-outlined"
+                    (onClick)="onLogout()"></p-button>
+
+                <!-- TODO: Add routerLink when create page exists -->
+                <div class="text-center text-sm text-gray-500 mt-2">
+                    Waiting for an invite? <a
+                        class="text-primary-600 hover:text-primary-700 cursor-pointer font-medium">Check your email</a>
+                </div>
+            </div>
+        </ng-template>
+    </p-card>
+</div>

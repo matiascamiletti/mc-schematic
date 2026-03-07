@@ -1,0 +1,5 @@
+<div class="footer w-full flex justify-center items-center mt-3 mb-3">
+    <p>All rights reserved © Platfrom</p>
+    <span class="ml-2 mr-2">|</span>
+    <p>Powered by <a href="https://matiascamiletti.com.ar" class="font-bold text-orange-500">MC</a></p>
+</div>

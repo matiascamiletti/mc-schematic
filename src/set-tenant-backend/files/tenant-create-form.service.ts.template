@@ -1,0 +1,30 @@
+import { Injectable } from '@angular/core';
+import { IftaTextareaField, IftaTextField, MCBaseHttpFormModalService } from '@mckit/form';
+import { MCTenant, MCTenantService } from '@mckit/tenant';
+import { inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { MCEventModalForm } from '@mckit/form';
+import { Validators } from '@angular/forms';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TenantCreateForm extends MCBaseHttpFormModalService<MCTenant> {
+
+  tenantService = inject(MCTenantService);
+
+  override open(): Observable<MCEventModalForm> {
+    return super.open({
+      title: 'Create new tenant',
+      httpService: this.tenantService,
+      identifierField: 'id'
+    });
+  }
+
+  getFields() {
+    return [
+      IftaTextField.init('name', 'Name', { validators: [Validators.required] }),
+      IftaTextareaField.init('description', 'Description')
+    ];
+  }
+}

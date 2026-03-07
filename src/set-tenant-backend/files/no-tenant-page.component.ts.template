@@ -1,0 +1,54 @@
+import { Component, DestroyRef, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { DialogService } from 'primeng/dynamicdialog';
+import { mcEventFormOperator, MCEventModalForm, MCHttpFormModalService } from '@mckit/form';
+import { TenantCreateForm } from '../../modals/tenant-create-form.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MCTenantService } from '@mckit/tenant';
+import { Router } from '@angular/router';
+import { MCAuthenticationService } from '@mckit/auth';
+import { tap } from 'rxjs';
+
+@Component({
+    selector: 'app-no-tenant-page',
+    standalone: true,
+    imports: [CommonModule, ButtonModule, CardModule],
+    providers: [DialogService, MCHttpFormModalService, TenantCreateForm],
+    templateUrl: './no-tenant-page.component.html',
+    styles: []
+})
+export class NoTenantPageComponent {
+    tenantCreateForm = inject(TenantCreateForm);
+
+    destroyRef = inject(DestroyRef);
+
+    tenantService = inject(MCTenantService);
+    authService = inject(MCAuthenticationService);
+
+
+    router = inject(Router);
+
+    afterNew(result: MCEventModalForm) {
+        this.tenantService.setCurrent(result.content);
+        this.router.navigate(['/']);
+    }
+
+    onClickAdd() {
+        this.tenantCreateForm.open()
+            .pipe(
+                takeUntilDestroyed(this.destroyRef),
+                mcEventFormOperator('saved', (result: MCEventModalForm) => this.afterNew(result))
+            )
+            .subscribe();
+    }
+
+    onLogout() {
+        this.authService.removeUser()
+            .pipe(
+                tap(() => window.location.reload())
+            )
+            .subscribe();
+    }
+}
