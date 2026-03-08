@@ -22,6 +22,11 @@
       "factory": "./add-table/index#addTable",
       "schema": "./add-table/schema.json"
     },
+    "create-crud": {
+      "description": "Create Crud",
+      "factory": "./create-crud/index#createCrud",
+      "schema": "./create-crud/schema.json"
+    },
     "set-tenant-backend": {
       "description": "Set multi tenant backend",
       "factory": "./set-tenant-backend/index#install"

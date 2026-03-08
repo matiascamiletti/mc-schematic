@@ -1,0 +1,12 @@
+import { Injectable } from '@angular/core';
+import { {{ classNameCamel }} } from '../entities/{{kebabName}}.entity';
+import { MCApiRestHttpService } from '@mckit/core';
+import { environment } from '../../../../environments/environment';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class {{ classNameCamel }}Service extends MCApiRestHttpService < {{ classNameCamel }}> {
+  override pathModel = '{{kebabName}}s';
+  override baseUrl: string = environment.baseUrl;
+}

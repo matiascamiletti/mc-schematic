@@ -1,0 +1,28 @@
+<mc-odata-page
+    [breadcrumb]="breadcrumb"
+    [title]="'{{ classNameCamel }} page'"
+    [subtitle]="'Description of page'"
+    [key]="'{{kebabName}}-list-page'"
+    [httpService]="httpService"
+    [columns]="columns"
+    [searchFieldsKey]="searchFieldsKey" >
+
+    <ng-template mcRightHeaderTemplate>
+      <p-button label="Add" styleClass="ml-3" (onClick)="onClickAdd()" />
+    </ng-template>
+
+    <ng-template mcThTemplate="actions"></ng-template>
+
+    <ng-template mcTdTemplate="status" let-row>
+        @if(row.status == 1){
+            <p-tag severity="success" value="Active" />
+        } @else {
+            <p-tag severity="secondary" value="Inactive" />
+        }
+    </ng-template>
+
+    <ng-template mcTdTemplate="actions" let-row>
+        <mc-actions-column [item]="row" (onEdit)="onClickEdit($event)" (onRemove)="onClickRemove($event)"></mc-actions-column>
+    </ng-template>
+
+</mc-odata-page>

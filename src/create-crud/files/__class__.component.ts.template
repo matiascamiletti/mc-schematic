@@ -1,0 +1,57 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, viewChild, DestroyRef } from '@angular/core';
+import { MCOdataPage, MCRightHeaderTemplateDirective } from '@mckit/odata';
+import { MenuItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { MCActionsColumn, MCTdTemplateDirective, MCThTemplateDirective } from '@mckit/table';
+import { {{classNameCamel}}Service } from '../../services/{{kebabName}}.service';
+import { TagModule } from 'primeng/tag';
+import { DialogService } from 'primeng/dynamicdialog';
+import { MCHttpFormModalService } from '@mckit/form';
+import { {{classNameCamel}}FormModal } from '../../modals/{{kebabName}}-form.modal';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+@Component({
+  selector: 'app-{{kebabName}}-list-page',
+  imports: [CommonModule, MCOdataPage, ButtonModule, MCThTemplateDirective, MCTdTemplateDirective, MCActionsColumn, MCRightHeaderTemplateDirective, TagModule],
+  providers: [DialogService, MCHttpFormModalService, {{classNameCamel}}FormModal],
+  templateUrl: './{{kebabName}}-list-page.html',
+  styleUrl: './{{kebabName}}-list-page.scss'
+})
+export class {{classNameCamel}} {
+
+    odataPage = viewChild(MCOdataPage);
+
+    breadcrumb: MenuItem[] = [
+        { label: 'Home', routerLink: '/' },
+        { label: '{{classNameCamel}}' }
+    ];
+
+    httpService = inject({{classNameCamel}}Service);
+
+    {{kebabName}}FormModal = inject({{classNameCamel}}FormModal);
+
+    destroyRef = inject(DestroyRef);
+
+    columns = [
+        {{columns}}
+    ];
+
+    searchFieldsKey = ['title'];
+
+    onClickAdd() {
+        this.onClickEdit(new {{classNameCamel}}());
+    }
+
+    onClickEdit(item: any) {
+        this.{{kebabName}}FormModal.open(item)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => {
+                this.odataPage()?.loadItems();
+            });
+    }
+
+    onClickRemove(item: any) {
+        this.odataPage()?.onClickRemove(item);
+    }
+}

@@ -13,6 +13,7 @@ export function createFileWithTemplate(tree: Tree, dirname: string, fileName: st
     let content = fs.readFileSync(filePath, 'utf8');
     // Replace vars
     Object.keys(vars).forEach(key => {
+      content = content.replace(new RegExp(`{{ ${key} }}`, 'g'), vars[key]);
       content = content.replace(new RegExp(`{{${key}}}`, 'g'), vars[key]);
     });
 
