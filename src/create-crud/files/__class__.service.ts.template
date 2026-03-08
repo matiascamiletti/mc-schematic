@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class {{ classNameCamel }}Service extends MCApiRestHttpService < {{ classNameCamel }}> {
-  override pathModel = '{{kebabName}}s';
+export class {{ classNameCamel }}Service extends MCApiRestHttpService<{{ classNameCamel }}> {
+  override pathModel = '/{{kebabName}}s';
   override baseUrl: string = environment.baseUrl;
 }

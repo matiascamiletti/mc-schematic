@@ -19,7 +19,7 @@ import { {{ classNameCamel }} } from '../../entities/{{kebabName}}.entity';
   templateUrl: './{{kebabName}}-list-page.html',
   styleUrl: './{{kebabName}}-list-page.scss'
 })
-export class {{classNameCamel}} {
+export class {{classNameCamel}}ListPage {
 
     odataPage = viewChild(MCOdataPage);
 
