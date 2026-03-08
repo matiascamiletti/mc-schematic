@@ -19,7 +19,10 @@ export function createCrud(_options: SchemaOptions): Rule {
 
     // Config base path for features
     const className = _options.name;
-    const featureName = _options.name.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+    let featureName = _options.name.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+    if (featureName.charAt(0) === '-') {
+      featureName = featureName.substring(1);
+    }
     const featurePath = 'src/app/features/' + featureName;
 
     // Create service

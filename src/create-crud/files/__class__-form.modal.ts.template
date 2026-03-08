@@ -12,11 +12,12 @@ export class {{ classNameCamel }}FormModal extends MCBaseHttpFormModalService<{{
 
   {{kebabName}}Service = inject({{ classNameCamel }}Service);
 
-  override open(): Observable<MCEventModalForm> {
+  show(item: {{classNameCamel}}): Observable<MCEventModalForm> {
     return super.open({
       title: '{{ classNameCamel }} Form',
       httpService: this.{{kebabName}}Service,
-      identifierField: 'id'
+      identifierField: 'id',
+      item: item
     });
   }
 

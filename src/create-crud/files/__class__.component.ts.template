@@ -10,6 +10,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { MCHttpFormModalService } from '@mckit/form';
 import { {{classNameCamel}}FormModal } from '../../modals/{{kebabName}}-form.modal';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { {{ classNameCamel }} } from '../../entities/{{kebabName}}.entity';
 
 @Component({
   selector: 'app-{{kebabName}}-list-page',
@@ -43,15 +44,15 @@ export class {{classNameCamel}} {
         this.onClickEdit(new {{classNameCamel}}());
     }
 
-    onClickEdit(item: any) {
-        this.{{kebabName}}FormModal.open(item)
+    onClickEdit(item: {{classNameCamel}}) {
+        this.{{kebabName}}FormModal.show(item)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(() => {
                 this.odataPage()?.loadItems();
             });
     }
 
-    onClickRemove(item: any) {
+    onClickRemove(item: {{classNameCamel}}) {
         this.odataPage()?.onClickRemove(item);
     }
 }
