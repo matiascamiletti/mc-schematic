@@ -44,7 +44,7 @@ function insertStringAt(originalString: string, stringToInsert: string, position
 }
 
 function processStyles(tree: Tree, _context: SchematicContext) {
-  const filePath = 'src/styles.scss';
+  const filePath = tree.exists('src/styles.scss') ? 'src/styles.scss' : 'src/styles.css';
 
   if (!tree.exists(filePath)) {
     return;

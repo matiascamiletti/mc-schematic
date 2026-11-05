@@ -1,17 +1,17 @@
 import { Component, DestroyRef, inject, viewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MCAuthSakaiComponent, MCAuthSakaiConfig, MCAuthenticationService, MCAuthModel, MCUser } from '@mckit/auth';
+import { MCAuthBasicComponent, MCAuthSakaiConfig, MCAuthenticationService, MCAuthModel, MCUser } from '@mckit/auth';
 import { catchError, switchMap, take, takeUntil, tap } from 'rxjs';
 
 @Component({
     selector: 'app-login-page',
-    imports: [MCAuthSakaiComponent],
+    imports: [MCAuthBasicComponent],
     templateUrl: './login-page.component.html',
     styleUrl: './login-page.component.scss'
 })
-export class LoginPageComponent {
+export class LoginPage {
 
-  authComp = viewChild.required(MCAuthSakaiComponent);
+  authComp = viewChild.required(MCAuthBasicComponent);
 
   mcAuthService = inject(MCAuthenticationService);
   router = inject(Router);
@@ -23,8 +23,13 @@ export class LoginPageComponent {
 
   routeToMain = '/dashboard';
 
+  constructor() {
+    afterNextRender(() => {
+      this.configLoader();
+    });
+  }
+
   ngOnInit(): void {
-    this.configLoader();
     this.loadConfig();
   }
 
@@ -37,6 +42,8 @@ export class LoginPageComponent {
   onLogin(data: MCAuthModel) {
     /*this.authService.signIn(data.email!, data.password!)
     .pipe(
+      //switchMap(() => this.tenantService.list().pipe(take(1))),
+      //tap(tenants => this.tenantService.setCurrent(tenants.data[0])),
       catchError(err => {
         this.authComp().hideLoading();
         this.authComp().showErrorMessage(err.error?.message || 'Error desconocido');
@@ -48,11 +55,12 @@ export class LoginPageComponent {
 
   loadConfig() {
     this.config = new MCAuthSakaiConfig();
-    this.config.title = 'Life Purse - Inicio de sesión';
+    this.config.title = 'APP - Inicio de sesión';
     this.config.subtitle = 'Por favor, inicie sesión para continuar';
     this.config.emailPlaceholder = 'Correo electrónico';
     this.config.passwordPlaceholder = 'Contraseña';
     this.config.submitButton = 'Iniciar sesión';
+    this.config.registerLink = '/register';
   }
 
   configLoader() {

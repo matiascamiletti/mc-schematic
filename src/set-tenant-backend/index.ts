@@ -29,15 +29,27 @@ import { tenantInterceptor } from '@mckit/tenant';
 
 import { environment } from '../environments/environment';`, importEndPosition + 1);
 
-  // Replace the zoneChangeDetectionStrategy
-  content = content.replace('provideZoneChangeDetection({ eventCoalescing: true }),', `provideZoneChangeDetection({ eventCoalescing: true }),
+  // Replace the zoneChangeDetectionStrategy or append to providers in zoneless app
+  if (content.includes('provideZoneChangeDetection({ eventCoalescing: true }),')) {
+    content = content.replace('provideZoneChangeDetection({ eventCoalescing: true }),', `provideZoneChangeDetection({ eventCoalescing: true }),
     provideMCAuth({
       baseUrl: environment.baseUrl
     }),
     provideHttpClient(
       withFetch(),
       withInterceptors([authInterceptor, tenantInterceptor])
-    ),,`);
+    ),`);
+  } else {
+    const providerPosition = content.lastIndexOf(']');
+    content = insertStringAt(content, `,
+    provideMCAuth({
+      baseUrl: environment.baseUrl
+    }),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([authInterceptor, tenantInterceptor])
+    )`, providerPosition);
+  }
 
   tree.overwrite(filePath, content);
 }
@@ -66,8 +78,14 @@ export function install(_options: any): Rule {
 `);
 
     // Replace App Component
-    tree.overwrite('src/app/app.html', '<router-outlet />');
-    tree.overwrite('src/app/app.ts', getContentByFile(__dirname, 'app.ts.template') ?? '');
+    const appHtmlPath = tree.exists('src/app/app.html') ? 'src/app/app.html' : 'src/app/app.component.html';
+    if (tree.exists(appHtmlPath)) {
+      tree.overwrite(appHtmlPath, '<router-outlet />');
+    }
+    const appTsPath = tree.exists('src/app/app.ts') ? 'src/app/app.ts' : 'src/app/app.component.ts';
+    if (tree.exists(appTsPath)) {
+      tree.overwrite(appTsPath, getContentByFile(__dirname, 'app.ts.template') ?? '');
+    }
 
     // Create Footer Layout
     tree.create('src/app/shared/components/footer-layout/footer-layout.component.scss', '');

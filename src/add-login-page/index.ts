@@ -19,9 +19,9 @@ function insertStringAt(originalString: string, stringToInsert: string, position
 }
 
 function processStyles(tree: Tree, _context: SchematicContext) {
-  const filePath = 'src/styles.scss';
+  const filePath = tree.exists('src/styles.scss') ? 'src/styles.scss' : 'src/styles.css';
 
-  if(!tree.exists(filePath)){
+  if (!tree.exists(filePath)) {
     return;
   }
 
@@ -47,7 +47,7 @@ function processStyles(tree: Tree, _context: SchematicContext) {
 function processAppConfig(tree: Tree, _context: SchematicContext) {
   const filePath = 'src/app/app.config.ts';
 
-  if(!tree.exists(filePath)){
+  if (!tree.exists(filePath)) {
     return;
   }
 
@@ -66,14 +66,25 @@ import { provideMCAuth, authInterceptor} from '@mckit/auth';
 
 import { environment } from '../environments/environment';`, importEndPosition + 1);
 
-  // Replace the zoneChangeDetectionStrategy
-  content = content.replace('provideZoneChangeDetection({ eventCoalescing: true }),', `provideZoneChangeDetection({ eventCoalescing: true }),
+  // Replace the zoneChangeDetectionStrategy or append to providers in zoneless app
+  if (content.includes('provideZoneChangeDetection({ eventCoalescing: true }),')) {
+    content = content.replace('provideZoneChangeDetection({ eventCoalescing: true }),', `provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(
       withInterceptors([authInterceptor])
     ),
     provideMCAuth({
       baseUrl: environment.baseUrl
     }),`);
+  } else {
+    const providerPosition = content.lastIndexOf(']');
+    content = insertStringAt(content, `,
+    provideHttpClient(
+      withInterceptors([authInterceptor])
+    ),
+    provideMCAuth({
+      baseUrl: environment.baseUrl
+    })`, providerPosition);
+  }
 
   tree.overwrite(filePath, content);
 }
@@ -90,12 +101,12 @@ export function addLoginPage(_options: any): Rule {
     runCommand('ng g environments', _context);
 
     // Config SCSS
-    processStyles(tree, _context); 
+    processStyles(tree, _context);
 
     // Add Route
     addRoute(`{
         path: 'login',
-        loadComponent: () => import('./features/auth/pages/login-page/login-page.component').then(m => m.LoginPageComponent)
+        loadComponent: () => import('./features/auth/pages/login-page/login-page').then(m => m.LoginPage)
       },`, tree, _context);
 
     // Config app.config.ts
@@ -105,7 +116,7 @@ export function addLoginPage(_options: any): Rule {
     runCommand('ng g c features/auth/pages/login-page', _context);
 
     // Add html
-    tree.overwrite('src/app/features/auth/pages/login-page/login-page.component.html', `<mc-auth-sakai #authComp [config]="config" (submit)="onLogin($event)" (action)="onAction($event)" />`);
+    tree.overwrite('src/app/features/auth/pages/login-page/login-page.component.html', `<mc-auth-basic #authComp [config]="config" (submit)="onLogin($event)" (action)="onAction($event)" />`);
 
     // Add Component
     const component = getContentByFile(__dirname, 'login-page.component.ts.template');

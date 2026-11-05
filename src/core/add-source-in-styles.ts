@@ -2,7 +2,7 @@ import { Tree } from '@angular-devkit/schematics';
 import { insertStringAt } from './insert-string-at';
 
 export function addSourceInStyles(tree: Tree, sourceText: string) {
-    const filePath = 'src/styles.scss';
+    const filePath = tree.exists('src/styles.scss') ? 'src/styles.scss' : 'src/styles.css';
 
     if(!tree.exists(filePath)){
         return;

@@ -27,11 +27,14 @@ export function install(_options: any): Rule {
   },`, tree, _context, `import { MCFuseLayoutComponent } from '@mckit/layout-fuse';`);
 
     // Generate Footer component
-    runCommand('ng g c layout/footer', _context);
+    runCommand('ng g c layout/footer --type=component', _context);
 
     // Replace App Component
     const component = getContentByFile(__dirname, 'app.ts.template');
-    tree.overwrite('src/app/app.ts', component ?? '');
+    const appTsPath = tree.exists('src/app/app.ts') ? 'src/app/app.ts' : 'src/app/app.component.ts';
+    if (tree.exists(appTsPath)) {
+      tree.overwrite(appTsPath, component ?? '');
+    }
 
     return tree;
   };
