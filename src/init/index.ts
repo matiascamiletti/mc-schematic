@@ -123,7 +123,7 @@ export function init(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
 
     // Install the required dependencies
-    runCommand('npm install --save @mckit/core primeng @primeuix/themes primeicons @ngx-pwa/local-storage@20', _context);
+    runCommand('npm install --save @mckit/core primeng @primeuix/themes primeicons @ngx-pwa/local-storage@21', _context);
     runCommand('npm install tailwindcss @tailwindcss/postcss postcss --force', _context);
     runCommand('npm i tailwindcss-primeui --save', _context);
 
