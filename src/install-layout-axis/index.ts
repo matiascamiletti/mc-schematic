@@ -9,22 +9,22 @@ import { addSourceInStyles } from '../core/add-source-in-styles';
 export function install(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
     // Install the required dependencies
-    runCommand('npm install --save @mckit/layout-core @mckit/layout @mckit/layout-fuse', _context);
+    runCommand('npm install --save @mckit/layout-core @mckit/layout @mckit/layout-axis', _context);
 
     // Config SCSS
     addSourceInStyles(tree, `
 @source "../node_modules/@mckit/layout-core";
 @source "../node_modules/@mckit/layout";
-@source "../node_modules/@mckit/layout-fuse";
+@source "../node_modules/@mckit/layout-axis";
 `);
 
     // Add Route
     addRoute(`{
     path: '',
-    component: MCFuseLayoutComponent,
+    component: MCAxisLayoutComponent,
     //canActivate: [mcAuthGuard],
     children: []
-  },`, tree, _context, `import { MCFuseLayoutComponent } from '@mckit/layout-fuse';`);
+  },`, tree, _context, `import { MCAxisLayoutComponent } from '@mckit/layout-axis';`);
 
     // Generate Footer component
     runCommand('ng g c layout/footer --type=component', _context);

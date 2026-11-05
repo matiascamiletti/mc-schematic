@@ -13,9 +13,13 @@
       "description": "Config and create login page",
       "factory": "./add-login-page/index#addLoginPage"
     },
+    "install-layout-axis": {
+      "description": "Install layout axis",
+      "factory": "./install-layout-axis/index#install"
+    },
     "install-layout-fuse": {
-      "description": "Install layout fuse",
-      "factory": "./install-layout-fuse/index#install"
+      "description": "Install layout axis",
+      "factory": "./install-layout-axis/index#install"
     },
     "addTable": {
       "description": "Add Table",

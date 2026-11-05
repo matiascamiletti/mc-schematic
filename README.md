@@ -34,9 +34,11 @@ Configura y genera una página de inicio de sesión (Login/Sign-in) estándar pa
 ng generate @mckit/schematics:add-login-page
 ```
 
-### 3. `install-layout-fuse`
-Instala y configura la plantilla/layout de Fuse en la aplicación.
+### 3. `install-layout-axis`
+Instala y configura la plantilla/layout de Axis (`@mckit/layout-axis`) en la aplicación.
 ```bash
+ng generate @mckit/schematics:install-layout-axis
+# o usando el alias compatible:
 ng generate @mckit/schematics:install-layout-fuse
 ```
 

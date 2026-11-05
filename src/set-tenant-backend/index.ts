@@ -60,7 +60,7 @@ export function install(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
 
     // Install the required dependencies
-    runCommand('npm install --save @mckit/layout-core @mckit/layout @mckit/layout-fuse @mckit/auth @mckit/filter @mckit/form @mckit/odata @mckit/table @mckit/tenant', _context);
+    runCommand('npm install --save @mckit/layout-core @mckit/layout @mckit/layout-axis @mckit/auth @mckit/filter @mckit/form @mckit/odata @mckit/table @mckit/tenant', _context);
 
     // Generate environments
     runCommand('ng g environments', _context);
@@ -69,7 +69,7 @@ export function install(_options: any): Rule {
     addSourceInStyles(tree, `
 @source "../node_modules/@mckit/layout-core";
 @source "../node_modules/@mckit/layout";
-@source "../node_modules/@mckit/layout-fuse";
+@source "../node_modules/@mckit/layout-axis";
 @source "../node_modules/@mckit/auth";
 @source "../node_modules/@mckit/table";
 @source "../node_modules/@mckit/odata";
@@ -125,12 +125,12 @@ export function install(_options: any): Rule {
   },
   {
     path: '',
-    component: MCFuseLayoutComponent,
+    component: MCAxisLayoutComponent,
     canActivate: [mcAuthGuard, tenantListGuard],
     children: []
   },`, tree, _context, `import { tenantListGuard } from '@mckit/tenant';
 import { mcAuthGuard } from '@mckit/auth';
-import { MCFuseLayoutComponent } from '@mckit/layout-fuse';`);
+import { MCAxisLayoutComponent } from '@mckit/layout-axis';`);
 
     // Config app.config.ts
     processAppConfig(tree, _context);
