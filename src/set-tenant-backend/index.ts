@@ -29,9 +29,9 @@ import { tenantInterceptor } from '@mckit/tenant';
 
 import { environment } from '../environments/environment';`, importEndPosition + 1);
 
-  // Replace the zoneChangeDetectionStrategy or append to providers in zoneless app
-  if (content.includes('provideZoneChangeDetection({ eventCoalescing: true }),')) {
-    content = content.replace('provideZoneChangeDetection({ eventCoalescing: true }),', `provideZoneChangeDetection({ eventCoalescing: true }),
+  // Insert providers after provideRouter(routes) or append to providers array
+  if (content.includes('provideRouter(routes),')) {
+    content = content.replace('provideRouter(routes),', `provideRouter(routes),
     provideMCAuth({
       baseUrl: environment.baseUrl
     }),
@@ -39,6 +39,15 @@ import { environment } from '../environments/environment';`, importEndPosition +
       withFetch(),
       withInterceptors([authInterceptor, tenantInterceptor])
     ),`);
+  } else if (content.includes('provideRouter(routes)')) {
+    content = content.replace('provideRouter(routes)', `provideRouter(routes),
+    provideMCAuth({
+      baseUrl: environment.baseUrl
+    }),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([authInterceptor, tenantInterceptor])
+    )`);
   } else {
     const providerPosition = content.lastIndexOf(']');
     content = insertStringAt(content, `,

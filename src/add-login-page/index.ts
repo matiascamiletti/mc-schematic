@@ -66,15 +66,23 @@ import { provideMCAuth, authInterceptor} from '@mckit/auth';
 
 import { environment } from '../environments/environment';`, importEndPosition + 1);
 
-  // Replace the zoneChangeDetectionStrategy or append to providers in zoneless app
-  if (content.includes('provideZoneChangeDetection({ eventCoalescing: true }),')) {
-    content = content.replace('provideZoneChangeDetection({ eventCoalescing: true }),', `provideZoneChangeDetection({ eventCoalescing: true }),
+  // Insert providers after provideRouter(routes) or append to providers array
+  if (content.includes('provideRouter(routes),')) {
+    content = content.replace('provideRouter(routes),', `provideRouter(routes),
     provideHttpClient(
       withInterceptors([authInterceptor])
     ),
     provideMCAuth({
       baseUrl: environment.baseUrl
     }),`);
+  } else if (content.includes('provideRouter(routes)')) {
+    content = content.replace('provideRouter(routes)', `provideRouter(routes),
+    provideHttpClient(
+      withInterceptors([authInterceptor])
+    ),
+    provideMCAuth({
+      baseUrl: environment.baseUrl
+    })`);
   } else {
     const providerPosition = content.lastIndexOf(']');
     content = insertStringAt(content, `,
